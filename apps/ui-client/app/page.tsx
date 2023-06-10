@@ -1,4 +1,4 @@
-import styles from './page.module.scss';
+import styles from './page.module.scss'
 
 export default async function Index() {
   /*
@@ -282,16 +282,9 @@ export default async function Index() {
                     <span>Enable faster CI & better DX</span>
                   </h2>
                 </div>
-                <p>
-                  You can activate distributed tasks executions and caching by
-                  running:
-                </p>
+                <p>You can activate distributed tasks executions and caching by running:</p>
                 <pre>nx connect-to-nx-cloud</pre>
-                <a
-                  href="https://nx.app/?utm_source=nx-project"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a href="https://nx.app/?utm_source=nx-project" target="_blank" rel="noreferrer">
                   {' '}
                   What is Nx Cloud?{' '}
                 </a>
@@ -412,5 +405,5 @@ export default async function Index() {
         </div>
       </div>
     </div>
-  );
+  )
 }
