@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  nx-app-base:
+    restart: always
+    build:
+      context: .
+      dockerfile: dockerfile.app
+    env_file: .env
+    volumes:
+      - ./:/app
+      - mono-node-modules:/app/node_modules # to share a mono node_modules folder among container apps
+    networks:
+      - myblog-network

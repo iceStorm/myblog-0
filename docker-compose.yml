@@ -1,0 +1,51 @@
+version: '3.8'
+
+networks:
+  myblog-network:
+
+volumes:
+  mono-node-modules: null
+
+services:
+  mongodb:
+    container_name: myblog-mongodb
+    image: mongo
+    volumes:
+      - .docker/mongo/data:/data/db
+      - .docker/mongo/init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    ports:
+      - 7500:27017
+
+  server-core:
+    depends_on:
+      - mongodb
+    extends:
+      file: docker-compose.app.yml
+      service: nx-app-base
+    container_name: myblog-server-core
+    command: npx nx serve server-core
+    ports:
+      - '${SERVER_PORT}:${SERVER_PORT}'
+      - 9229:9229 # NestJS debugger port
+
+  ui-admin:
+    extends:
+      file: docker-compose.app.yml
+      service: nx-app-base
+    depends_on:
+      - server-core
+    container_name: myblog-ui-admin
+    command: npx nx serve ui-admin
+    ports:
+      - '${UI_ADMIN_PORT}:${UI_ADMIN_PORT}'
+
+  ui-client:
+    extends:
+      file: docker-compose.app.yml
+      service: nx-app-base
+    depends_on:
+      - server-core
+    container_name: myblog-ui-client
+    command: npx nx serve ui-client
+    ports:
+      - '${UI_CLIENT_PORT}:${UI_CLIENT_PORT}'

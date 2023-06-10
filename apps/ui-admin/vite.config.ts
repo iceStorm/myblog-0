@@ -7,7 +7,7 @@ export default defineConfig({
   cacheDir: '../../node_modules/.vite/ui-admin',
 
   server: {
-    port: 4200,
+    port: parseInt(process.env.UI_ADMIN_PORT as string),
     host: 'localhost'
   },
 
