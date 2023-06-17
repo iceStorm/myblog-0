@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Satisfy');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  // height: stretch;
+  // height: -webkit-fill-available;
+}
+
+body {
+  // min-height: 100vh;
+  // min-height: stretch;
+  // min-height: -webkit-fill-available;
+}
+
+.font-highlight {
+  font-family: 'Satisfy', cursive;
+
+  @apply text-3xl;
+}
+
+#lobby {
+  height: 100vh; /* fall-back */
+  // height: -moz-available;
+  // height: -webkit-fill-available;
+  // height: stretch;
+}
+
+#app-header {
+  > nav {
+    @apply transition-all duration-700;
+  }
+
+  &.attached {
+    @apply bg-transparent transition-all duration-700;
+    @apply bg-black bg-opacity-20 backdrop-blur-md;
+
+    > nav {
+      @apply py-3;
+    }
+  }
+}
