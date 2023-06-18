@@ -5,7 +5,7 @@ import { Route, Routes, Link } from 'react-router-dom'
 
 export function App() {
   return (
-    <div>
+    <div className={styles.app}>
       <h1>
         <span> Hello there, </span>
         Welcome ui-admin 👋

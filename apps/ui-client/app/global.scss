@@ -10,19 +10,27 @@
 }
 
 #lobby {
-  height: 100vh;
+  // background-image: url('/home-banner.jpg');
+  // background-attachment: fixed;
+  // background-position: center;
+  // background-repeat: no-repeat;
+  // background-size: cover;
 }
 
 #app-header {
+  @apply transition-all duration-700;
   > nav {
     @apply transition-all duration-700;
   }
 
+  @apply border-transparent;
+
   &.attached {
     @apply bg-transparent transition-all duration-700;
-    @apply bg-black bg-opacity-20 backdrop-blur-md;
+    @apply bg-black bg-opacity-20 backdrop-blur-md border-b border-white border-opacity-20;
 
     > nav {
+      @apply transition-all duration-700;
       @apply py-3;
     }
   }

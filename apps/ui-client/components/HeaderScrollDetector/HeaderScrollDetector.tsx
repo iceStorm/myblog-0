@@ -2,10 +2,14 @@
 
 import { useEffect } from 'react'
 
-export function HeaderScrollDetector() {
+interface HeaderScrollDetectorProps {
+  threshold: number
+}
+
+export function HeaderScrollDetector(props: HeaderScrollDetectorProps) {
   useEffect(() => {
     document.addEventListener('scroll', (e) => {
-      if (window.scrollY >= 300) {
+      if (window.scrollY >= props.threshold) {
         document.getElementById('app-header')?.classList.add('attached')
       } else {
         document.getElementById('app-header')?.classList.remove('attached')

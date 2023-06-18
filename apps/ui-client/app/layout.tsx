@@ -1,85 +1,61 @@
+import { GetServerSideProps } from 'next'
 import Image from 'next/image'
+import Script from 'next/script'
 
 import clsx from 'clsx'
 
-import { CgMenuRight } from 'react-icons/cg'
-
 import './global.scss'
 
+import { apiClient } from '../utils/api-client'
+
 import { ScrollDown } from '../components/ScrollDown'
-import { BackgroundAudio } from '../components/BackgroundAudio'
-import { MusicNote } from '../components/MusicNote'
 import { HeaderScrollDetector } from '../components/HeaderScrollDetector'
+import { MusicPlayer } from '../components/MusicPlayer'
+import { SideMenu } from '../components/SideMenu'
 
 export const metadata = {
   title: 'dreamee',
   description: 'Welcome to my fantastic island.'
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+interface RootLayoutProps {
+  children: React.ReactNode
+}
+
+export default async function RootLayout({ children }: RootLayoutProps) {
+  let playlist: SpotifyApi.PlaylistBaseObject | undefined = undefined
+
+  try {
+    const { data } = await apiClient.get<SpotifyApi.PlaylistBaseObject>('/api/spotify')
+    playlist = data
+
+    console.log(playlist.tracks.items[0].track)
+  } catch (error) {
+    console.log(error)
+  }
+
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <Script src="https://sdk.scdn.co/spotify-player.js"></Script>
+      </head>
+
       <body className="flex flex-col bg-dark">
-        <HeaderScrollDetector />
+        <HeaderScrollDetector threshold={200} />
 
         {/* navigation bar */}
         <header id="app-header" className={clsx('fixed z-50 left-0 right-0 top-0')}>
           <nav className={clsx('container flex justify-between gap-5 items-center py-5', '')}>
-            <a role="button" href="/" className={clsx('text-white font-highlight')}>
+            <a role="link" href="/" className={clsx('text-white font-highlight')}>
               dreamee.vn
             </a>
 
-            <button
-              className={clsx(
-                'lg:hidden flex justify-center items-center p-2',
-                'text-white bg-white bg-opacity-20 rounded-full shadow-md'
-              )}
-            >
-              <CgMenuRight className="" size={20} />
-            </button>
-
-            <ul className={clsx('text-white flex items-center gap-2 lg:gap-5', 'hidden lg:flex')}>
-              <li>
-                <a
-                  href="/"
-                  className="flex px-5 py-1 font-medium bg-white bg-opacity-20 backdrop-blur-md rounded-full shadow-md"
-                >
-                  Home
-                </a>
-              </li>
-
-              <li>
-                <a href="/" className="flex px-5 py-1 font-medium">
-                  Gallery
-                </a>
-              </li>
-
-              <li>
-                <a href="/" className="flex px-5 py-1 font-medium">
-                  Programming
-                </a>
-              </li>
-
-              <li>
-                <a href="/" className="flex px-5 py-1 font-medium">
-                  About
-                </a>
-              </li>
-
-              <li>
-                <a href="/" className="flex px-5 py-1 font-medium">
-                  Contact
-                </a>
-              </li>
-            </ul>
+            <SideMenu />
           </nav>
         </header>
 
-        {/* lobby background image */}
-        <section id="lobby" className={clsx('relative bg-red')}>
-          <BackgroundAudio />
-          <MusicNote />
-
+        {/* lobby */}
+        <section id="lobby" className={clsx('h-screen relative bg-red')}>
           <Image
             src="/home-banner.jpg"
             alt="home_banner"
@@ -91,16 +67,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             className="transition-all duration-500 w-full h-full object-cover"
           />
 
+          {playlist && <MusicPlayer playlist={playlist} />}
+
           {/* scroll more button */}
           <button
             role="button"
+            aria-label="Scroll down to view more"
             className="absolute bottom-0 left-0 right-0 container text-center mb-5"
           >
             <ScrollDown />
           </button>
         </section>
 
-        <main id="app-main" className={clsx('flex-1', 'text-white')}>
+        <main id="app-main" className={clsx('flex-1', 'text-gray-400')}>
           {children}
         </main>
 
